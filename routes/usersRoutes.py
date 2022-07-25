@@ -3,7 +3,6 @@ from flask import Blueprint
 from controllers.userController import selectUser
 
 
-
 users_api = Blueprint("users_api", __name__)
 
 

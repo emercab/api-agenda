@@ -1,8 +1,8 @@
 from datetime import datetime
-from email.policy import default
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from dataclasses import dataclass
+from helpers import Serializer
 
 # Clase Base de la que heredarán todas las clases que van a mapear de la DB
 Base = declarative_base()
@@ -26,11 +26,13 @@ class Usuario(Base):
 
     def __repr__(self):
         return \
-            f"Usuario(id={self.id}, nombre={self.nombre}, apellidos={self.apellidos}, "\
-            f"email={self.email}, password={self.password})"
+            f"id={self.id}, nombre={self.nombre}, apellidos={self.apellidos}, "\
+            f"email={self.email}, password={self.password}"
 
 
-class Contacto(Base):
+class Contacto(Base, Serializer):
+    # Uso la clase Serializer de mi helper para facilitar la creación
+    # de la respuesta de consultas en formato JSON
     id: int
     nombre: str
     apellidos: str

@@ -12,7 +12,7 @@ def selectContacts(id_usuario, campo, orden):
 
         # Ahora armo las consultas dependiendo de los parámetros recibidos
         if campo == "ID" and orden == "ASC":
-            contacts = session.query(Contacto).join(Pertenece, Contacto.id == Pertenece.id_contacto).filter(Pertenece.id_usuario == id_usuario).order_by(Contacto.id).all()
+            contacts =session.query(Contacto).join(Pertenece, Contacto.id == Pertenece.id_contacto).filter(Pertenece.id_usuario == id_usuario).order_by(Contacto.id).all()
         elif campo == "ID" and orden == "DESC":
             contacts = session.query(Contacto).join(Pertenece, Contacto.id == Pertenece.id_contacto).filter(Pertenece.id_usuario == id_usuario).order_by(Contacto.id.desc()).all()
         elif campo == "NOMBRE" and orden == "ASC":
@@ -27,5 +27,5 @@ def selectContacts(id_usuario, campo, orden):
         print(f"Error: {e}")
     finally:
         session.close()
-    
+
     return contacts
