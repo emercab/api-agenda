@@ -7,9 +7,12 @@ from helpers import Serializer
 # Clase Base de la que heredarán todas las clases que van a mapear de la DB
 Base = declarative_base()
 
+# Adicionalemnte, cada clase que representa mis tablas en la DB heredará
+# también de la clase Serializer de mi helper para facilitar la conversión
+# de la respuesta a formato JSON
 
 @dataclass
-class Usuario(Base):
+class Usuario(Base, Serializer):
     id: int
     nombre: str
     apellidos: str
@@ -31,8 +34,6 @@ class Usuario(Base):
 
 
 class Contacto(Base, Serializer):
-    # Uso la clase Serializer de mi helper para facilitar la creación
-    # de la respuesta de consultas en formato JSON
     id: int
     nombre: str
     apellidos: str
@@ -59,7 +60,7 @@ class Contacto(Base, Serializer):
             f"fechaCreacion={self.fechaCreacion})"
 
 
-class Pertenece(Base):
+class Pertenece(Base, Serializer):
     id: int
     id_usuario: int
     id_contacto: int

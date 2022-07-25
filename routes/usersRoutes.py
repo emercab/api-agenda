@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import jsonify, request
 from flask import Blueprint
 from controllers.userController import selectUser
 
