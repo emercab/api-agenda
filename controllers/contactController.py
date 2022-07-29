@@ -89,3 +89,55 @@ def searchContact(id_usuario, texto):
         return {}
 
 
+def insertContact(id_usuario, nombre, apellidos, direccion, email, telefono):
+    # Inserta un nuevo contacto en la DB con los valores que recibe, primero
+    # lo inserta en la tabla contacto y luego en la tabla pertenece. Si tuvo
+    # éxito retorna True, en caso contrario, False.
+    
+    try:
+        # Creo un objeto de la clase Contacto que tendrá los datos del 
+        # contacto y luego será mapeado con la tabla
+        contact = Contacto(
+            nombre = nombre,
+            apellidos = apellidos,
+            direccion = direccion,
+            email = email,
+            telefono= telefono,
+        )
+        
+        # Me conecto a la DB
+        session = conectar()
+
+        # Inserto el objeto contacto a la tabla Contacto de la DB
+        session.add(contact)
+
+        # Necesario para que el cambio en la tabla se haga efectivo
+        session.commit()
+
+        # Necesario para realziar otra transacción en la DB cuando ya se
+        # ha hecho una
+        session.refresh(contact)
+
+        # Ahora preparo los valores que se van a insertar en la tabla
+        # pertenece: id_contacto e id_usuario
+        # Primero, obtengo el id_contacto del registro que se acabó de
+        # insertar
+        id_contacto = contact.id
+
+        # Ahora se crea un objeto de la clase Pertenece para insertarlo en DB
+        pertenece = Pertenece(
+            id_usuario = id_usuario, # Valor recibido como parámetro
+            id_contacto = id_contacto,
+        )
+
+        # Lo inserto a la tabla
+        session.add(pertenece)
+        session.commit()
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        session.close()
+    
+    return True
+

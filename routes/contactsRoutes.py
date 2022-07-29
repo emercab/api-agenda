@@ -27,10 +27,28 @@ def getContact():
 
 
 @contacts_api.route("/search_in_contacts", methods=["GET"])
-def search_in_contacts():
+def searchInContacts():
     # Recojo los parámetros que recibe este endpoint
     params = request.args
     id_usuario = params["id_usuario"]
     texto = params["texto"]
     contacts = contactsController.searchContact(id_usuario, texto)
     return jsonify(contacts)
+
+
+@contacts_api.route("/contact", methods=["POST"])
+def insertContact():
+    # Recojo los parámetros que recibe este endpoint
+    params = request.args
+    id_usuario = params["id_usuario"]
+    nombre = params["nombre"]
+    apellidos = params["apellidos"]
+    direccion = params["direccion"]
+    email = params["email"]
+    telefono = params["telefono"]
+    
+    # Envío todos los parámetros al método del controlador que hace el proceso
+    result = contactsController.insertContact(
+        id_usuario, nombre, apellidos, direccion, email, telefono
+    )
+    return jsonify({ "result": result })
