@@ -1,9 +1,11 @@
 from flask import Flask
+from flask_cors import CORS
 from routes.usersRoutes import users_api
 from routes.contactsRoutes import contacts_api
 
 
 app = Flask(__name__)
+CORS(app)
 
 # Vínculo al route de los endpoints de /users
 app.register_blueprint(users_api)
