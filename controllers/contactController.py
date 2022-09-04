@@ -141,3 +141,61 @@ def insertContact(id_usuario, nombre, apellidos, direccion, email, telefono):
     
     return True
 
+
+def updateContact(id, nombre, apellidos, direccion, email, telefono):
+    # Actualiza un contacto en la DB con los valores que recibe. Si tuvo
+    # éxito retorna True, en caso contrario, False.
+    
+    try:
+        # Me conecto a la DB
+        session = conectar()
+
+        # Creo un objeto de la clase Contacto que tendrá los datos del 
+        # contacto y luego será mapeado con la tabla
+        contact = session.query(Contacto).get(id)
+
+        # Modifico los datos con los parámetros recibidos
+        contact.nombre = nombre
+        contact.apellidos = apellidos
+        contact.direccion = direccion
+        contact.email = email
+        contact.telefono = telefono
+
+        # Envío cambios del contacto a la tabla Contacto de la DB
+        session.add(contact)
+
+        # Necesario para que el cambio en la tabla se haga efectivo
+        session.commit()
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        session.close()
+    
+    return True
+
+
+def deleteContact(id_usuario, id_contacto):
+    # Elimina un contacto de las tablas contactos y pertenece. Si tuvo
+    # éxito retorna True, en caso contrario, False.
+    
+    try:
+        # Me conecto a la DB
+        session = conectar()
+
+        # Elimino de la tabla Pertenece
+        session.query(Pertenece).filter(Pertenece.id_usuario == id_usuario).filter(Pertenece.id_contacto == id_contacto).delete()
+
+        # Elimino de la tabla Contactos
+        contact = session.query(Contacto).get(id_contacto)
+        session.delete(contact)
+
+        # Necesario para que el cambio en la tabla se haga efectivo
+        session.commit()
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        session.close()
+    
+    return True
